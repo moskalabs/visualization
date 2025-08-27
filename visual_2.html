@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Innovation Patent Diagrams - Advanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.03"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>') repeat;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .patent-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .patent-drawing {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px;
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), 
+                        0 0 100px rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        
+        .patent-drawing::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 300% 100%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .patent-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .figure-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .flowchart {
+            position: relative;
+            margin: 50px auto;
+            max-width: 1000px;
+        }
+        
+        .process-box {
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #667eea, #764ba2) border-box;
+            border-radius: 12px;
+            padding: 18px 25px;
+            text-align: center;
+            position: relative;
+            margin: 25px auto;
+            font-size: 13px;
+            font-weight: 600;
+            max-width: 220px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+            transition: all 0.3s ease;
+            color: #2d3748;
+        }
+        
+        .process-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+        }
+        
+        .process-number {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            font-weight: 700;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(240, 147, 251, 0.3);
+        }
+        
+        .diamond-box {
+            width: 160px;
+            height: 110px;
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            transform: rotate(45deg);
+            margin: 50px auto;
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(250, 112, 154, 0.3);
+        }
+        
+        .diamond-text {
+            transform: rotate(-45deg);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            width: 100px;
+            color: white;
+        }
+        
+        .dashed-group {
+            border: 3px dashed #667eea;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            position: relative;
+            background: rgba(102, 126, 234, 0.03);
+        }
+        
+        .group-label {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: white;
+            padding: 5px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #667eea;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+        }
+        
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 20px solid;
+            border-top-color: #667eea;
+            margin: 15px auto;
+            filter: drop-shadow(0 4px 6px rgba(102, 126, 234, 0.3));
+        }
+        
+        .arrow-line {
+            width: 3px;
+            height: 35px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+        
+        .horizontal-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 50px 0;
+            gap: 30px;
+        }
+        
+        .horizontal-arrow {
+            flex: 0 0 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            position: relative;
+            border-radius: 2px;
+        }
+        
+        .horizontal-arrow::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: -6px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid #764ba2;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+        
+        .system-diagram {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 50px 0;
+        }
+        
+        .triple-flow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .system-block {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            border: 2px solid transparent;
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.1);
+        }
+        
+        .system-title {
+            font-size: 15px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .module {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 12px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, #667eea, #764ba2) 1;
+        }
+        
+        .module:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+        
+        .module-number {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .pbr-visual {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 15px;
+        }
+        
+        .pbr-map {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pbr-map-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .pbr-map:nth-child(1) .pbr-map-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .pbr-map:nth-child(2) .pbr-map-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
+        .pbr-map:nth-child(3) .pbr-map-icon {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+        
+        .pbr-map:nth-child(4) .pbr-map-icon {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+        }
+        
+        .pbr-map-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #4a5568;
+        }
+        
+        .roi-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+        }
+        
+        .roi-area {
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            position: relative;
+        }
+        
+        .roi-high {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .roi-low {
+            background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hybrid-render {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 40px 0;
+            padding: 30px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 20px;
+        }
+        
+        .render-component {
+            text-align: center;
+        }
+        
+        .render-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+        }
+        
+        .mesh-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .gaussian-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            box-shadow: 0 15px 40px rgba(240, 147, 251, 0.3);
+        }
+        
+        .plus-sign {
+            font-size: 48px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 0 20px;
+        }
+        
+        .legend {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(102, 126, 234, 0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+        
+        .legend-item {
+            font-size: 12px;
+            padding: 10px 15px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+        
+        .legend-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(3px);
+        }
+        
+        @media (max-width: 768px) {
+            .system-diagram,
+            .triple-flow {
+                grid-template-columns: 1fr;
+            }
+            
+            .horizontal-flow {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .horizontal-arrow {
+                width: 3px;
+                height: 40px;
+                flex: none;
+            }
+            
+            .pbr-visual {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .roi-visual,
+            .hybrid-render {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="patent-container">
+        <!-- Figure 1: PBR Material Synthesis -->
+        <div class="patent-drawing">
+            <div class="figure-number">FIG. 12</div>
+            <div class="patent-title">GS 통계 기반 절차적 PBR 재질 자동 생성</div>
+            
+            <div class="flowchart">
+                <div class="process-box">
+                    <div class="process-number">1210</div>
+                    Gaussian Splatting 데이터
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="dashed-group">
+                    <div class="group-label">통계 분석 모듈 (1220)</div>
+                    
+                    <div class="process-box">
+                        <div class="process-number">1221</div>
+                        가우시안 클러스터링<br>
+                        <span style="font-size: 11px; color: #718096;">색상/위치 기반 그룹화</span>
+                    </div>
+                    
+                    <div class="arrow-line"></div>
+                    <div class="arrow-down"></div>
+                    
+                    <div class="process-box">
+                        <div class="process-number">1222</div>
+                        다중 시점 역추적<br>
+                        <span style="font-size: 11px; color: #718096;">원본 이미지 분석</span>
+                    </div>
+                    
+                    <div class="arrow-line"></div>
+                    <div class="arrow-down"></div>
+                    
+                    <div class="process-box">
+                        <div class="process-number">1223</div>
+                        재질 속성 추론<br>
+                        <span style="font-size: 11px; color: #718096;">하이라이트/반사 분석</span>
+                    </div>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="pbr-visual">
+                    <div class="pbr-map">
+                        <div class="pbr-map-icon">🎨</div>
+                        <div class="pbr-map-label">Base Color</div>
+                    </div>
+                    <div class="pbr-map">
+                        <div class="pbr-map-icon">✨</div>
+                        <div class="pbr-map-label">Roughness</div>
+                    </div>
+                    <div class="pbr-map">
+                        <div class="pbr-map-icon">🔧</div>
+                        <div class="pbr-map-label">Metallic</div>
+                    </div>
+                    <div class="pbr-map">
+                        <div class="pbr-map-icon">📐</div>
+                        <div class="pbr-map-label">Normal</div>
+                    </div>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="process-box">
+                    <div class="process-number">1240</div>
+                    언리얼 머티리얼 인스턴스<br>
+                    자동 생성
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">1210: GS 데이터 입력부</div>
+                <div class="legend-item">1220: 통계적 재질 분석 엔진</div>
+                <div class="legend-item">1230: PBR 맵 생성부</div>
+                <div class="legend-item">1240: 언리얼 엔진 통합 모듈</div>
+            </div>
+        </div>
+        
+        <!-- Figure 2: Key-View Selection -->
+        <div class="patent-drawing">
+            <div class="figure-number">FIG. 18</div>
+            <div class="patent-title">시맨틱-엔트로피 기반 핵심 뷰 선별 시스템</div>
+            
+            <div class="flowchart">
+                <div class="process-box">
+                    <div class="process-number">1810</div>
+                    다중 이미지 입력<br>
+                    <span style="font-size: 11px; color: #718096;">수백~수천 장</span>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="triple-flow">
+                    <div class="process-box" style="max-width: 100%;">
+                        <div class="process-number">1821</div>
+                        시맨틱 분할<br>
+                        <span style="font-size: 11px; color: #718096;">SegFormer</span>
+                    </div>
+                    
+                    <div class="process-box" style="max-width: 100%;">
+                        <div class="process-number">1822</div>
+                        하늘/배경 제거<br>
+                        <span style="font-size: 11px; color: #718096;">마스킹</span>
+                    </div>
+                    
+                    <div class="process-box" style="max-width: 100%;">
+                        <div class="process-number">1823</div>
+                        엔트로피 계산<br>
+                        <span style="font-size: 11px; color: #718096;">정보량 측정</span>
+                    </div>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="diamond-box">
+                    <div class="diamond-text">
+                        <div class="process-number" style="left: -40px; background: linear-gradient(135deg, #fa709a, #fee140);">1830</div>
+                        스코어<br>임계값
+                    </div>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="dashed-group">
+                    <div class="group-label">Key-View 선택 (1840)</div>
+                    
+                    <div class="horizontal-flow">
+                        <div class="process-box" style="max-width: 160px;">
+                            <div class="process-number">1841</div>
+                            엔트로피 정렬
+                        </div>
+                        <div class="horizontal-arrow"></div>
+                        <div class="process-box" style="max-width: 160px;">
+                            <div class="process-number">1842</div>
+                            포즈 차이 검증
+                        </div>
+                        <div class="horizontal-arrow"></div>
+                        <div class="process-box" style="max-width: 160px;">
+                            <div class="process-number">1843</div>
+                            중복 제거
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="process-box">
+                    <div class="process-number">1850</div>
+                    선별된 Key-View Set<br>
+                    <span style="font-size: 11px; color: #718096;">30~50% 압축</span>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">1810: 이미지 입력 인터페이스</div>
+                <div class="legend-item">1820: 시맨틱-엔트로피 분석부</div>
+                <div class="legend-item">1830: 임계값 판단부</div>
+                <div class="legend-item">1840: 지능형 선별 알고리즘</div>
+                <div class="legend-item">1850: 최적화된 출력</div>
+            </div>
+        </div>
+        
+        <!-- Figure 3: ROI Prioritization -->
+        <div class="patent-drawing">
+            <div class="figure-number">FIG. 19</div>
+            <div class="patent-title">인터랙티브 ROI 기반 선택적 메시화 시스템</div>
+            
+            <div class="flowchart">
+                <div class="process-box">
+                    <div class="process-number">1910</div>
+                    GS 렌더링 뷰어
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="process-box">
+                    <div class="process-number">1920</div>
+                    사용자 ROI 지정<br>
+                    <span style="font-size: 11px; color: #718096;">마우스/VR 컨트롤러</span>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="roi-visual">
+                    <div class="roi-area roi-high">
+                        <div class="process-number" style="top: -15px; left: 50%; transform: translateX(-50%);">1931</div>
+                        고품질<br>ROI 영역
+                    </div>
+                    <div style="font-size: 24px; font-weight: 700; color: #667eea;">VS</div>
+                    <div class="roi-area roi-low">
+                        <div class="process-number" style="top: -15px; left: 50%; transform: translateX(-50%);">1932</div>
+                        저품질<br>외부 영역
+                    </div>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="dashed-group">
+                    <div class="group-label">차등 메시화 처리 (1940)</div>
+                    
+                    <div class="horizontal-flow">
+                        <div class="process-box" style="max-width: 180px;">
+                            <div class="process-number">1941</div>
+                            Poisson Recon<br>
+                            <span style="font-size: 11px; color: #718096;">ROI 고품질</span>
+                        </div>
+                        <div class="horizontal-arrow"></div>
+                        <div class="process-box" style="max-width: 180px;">
+                            <div class="process-number">1942</div>
+                            Impostor 생성<br>
+                            <span style="font-size: 11px; color: #718096;">외부 저품질</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="process-box">
+                    <div class="process-number">1950</div>
+                    하이브리드 메시 출력<br>
+                    <span style="font-size: 11px; color: #718096;">FBX/OBJ</span>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">1910: GS 뷰어 인터페이스</div>
+                <div class="legend-item">1920: 사용자 인터랙션 모듈</div>
+                <div class="legend-item">1930: ROI 영역 분류부</div>
+                <div class="legend-item">1940: 적응형 메시 생성 엔진</div>
+                <div class="legend-item">1950: 통합 출력 모듈</div>
+            </div>
+        </div>
+        
+        <!-- Figure 4: Hybrid Rendering -->
+        <div class="patent-drawing">
+            <div class="figure-number">FIG. 20</div>
+            <div class="patent-title">정적 메시 + 동적 가우시안 데칼 하이브리드 렌더링</div>
+            
+            <div class="flowchart">
+                <div class="process-box">
+                    <div class="process-number">2010</div>
+                    원본 Gaussian Splatting
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="process-box">
+                    <div class="process-number">2020</div>
+                    메시 변환 & 오차 계산
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-down"></div>
+                
+                <div class="diamond-box">
+                    <div class="diamond-text">
+                        <div class="process-number" style="left: -40px; background: linear-gradient(135deg, #fa709a, #fee140);">2030</div>
+                        오차<br>임계값
+                    </div>
+                </div>
+                
+                <div class="arrow-line"></div>
+                <div class="arrow-
